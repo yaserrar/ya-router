@@ -1,4 +1,5 @@
 import React from "react";
+import { SafeAreaView, Text, View } from "react-native";
 import { useNavigation } from "../context/navigation-context";
 
 interface NavigatorProps {
@@ -13,5 +14,10 @@ export const Navigator: React.FC<NavigatorProps> = ({ routes }) => {
     throw new Error(`Route "${currentRoute}" not found in routes.`);
   }
 
-  return <ScreenComponent />;
+  return (
+    <SafeAreaView>
+      <Text>{currentRoute}</Text>
+      <ScreenComponent />
+    </SafeAreaView>
+  );
 };

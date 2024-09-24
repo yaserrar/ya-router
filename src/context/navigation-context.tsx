@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 interface NavigationContextProps {
   currentRoute: string;
   navigate: (route: string) => void;
+  replace: (route: string) => void;
   goBack: () => void;
 }
 
@@ -20,6 +21,12 @@ export const NavigationProvider: React.FC<{
     setHistory((prev) => [...prev, route]);
   };
 
+  const replace = (route: string) => {
+    setHistory((prev) =>
+      prev.length > 1 ? [...prev.slice(0, -1), route] : [route]
+    );
+  };
+
   const goBack = () => {
     setHistory((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev));
   };
@@ -27,7 +34,9 @@ export const NavigationProvider: React.FC<{
   const currentRoute = history[history.length - 1];
 
   return (
-    <NavigationContext.Provider value={{ currentRoute, navigate, goBack }}>
+    <NavigationContext.Provider
+      value={{ currentRoute, navigate, replace, goBack }}
+    >
       {children}
     </NavigationContext.Provider>
   );
