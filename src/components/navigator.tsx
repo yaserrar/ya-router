@@ -1,23 +1,23 @@
 import React from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native";
 import { useNavigation } from "../context/navigation-context";
 
-interface NavigatorProps {
-  routes: { [key: string]: React.ComponentType };
-}
+type NavigatorProps<RouteNames extends string> = {
+  routes: { [key in RouteNames]: React.ComponentType };
+};
 
-export const Navigator: React.FC<NavigatorProps> = ({ routes }) => {
-  const { currentRoute } = useNavigation();
-  const ScreenComponent = routes[currentRoute];
+export const Navigator = <RouteNames extends string>({
+  routes,
+}: NavigatorProps<RouteNames>) => {
+  const { currentRoute } = useNavigation<RouteNames>();
+
+  const ScreenComponent = routes[currentRoute] as
+    | React.ComponentType
+    | undefined;
 
   if (!ScreenComponent) {
     throw new Error(`Route "${currentRoute}" not found in routes.`);
   }
 
-  return (
-    <SafeAreaView>
-      <Text>{currentRoute}</Text>
-      <ScreenComponent />
-    </SafeAreaView>
-  );
+  return <ScreenComponent />;
 };
