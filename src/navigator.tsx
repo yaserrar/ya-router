@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigation } from "../context/navigation-context";
+import { useNavigation } from "./store";
 
 type NavigatorProps = {
   routes: { [key: string]: React.ComponentType };
@@ -7,6 +7,10 @@ type NavigatorProps = {
 
 export const Navigator = ({ routes }: NavigatorProps) => {
   const { currentRoute } = useNavigation();
+
+  if (!currentRoute) {
+    throw new Error(`Route not found in routes.`);
+  }
 
   const ScreenComponent = routes[currentRoute];
 

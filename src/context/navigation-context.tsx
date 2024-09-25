@@ -7,30 +7,30 @@ import React, {
 } from "react";
 import { BackHandler } from "react-native";
 
-type NavigationContextProps<RouteNames extends string> = {
-  currentRoute: RouteNames;
-  navigate: (route: RouteNames) => void;
-  replace: (route: RouteNames) => void;
+type NavigationContextProps = {
+  currentRoute: string;
+  navigate: (route: string) => void;
+  replace: (route: string) => void;
   goBack: () => void;
 };
-const NavigationContext = createContext<
-  NavigationContextProps<any> | undefined
->(undefined);
+const NavigationContext = createContext<NavigationContextProps | undefined>(
+  undefined
+);
 
-export const NavigationProvider = <RouteNames extends string>({
+export const NavigationProvider = ({
   initialRoute,
   children,
 }: {
-  initialRoute: RouteNames;
-  children: ReactNode;
+  initialRoute: string;
+  children: string;
 }) => {
-  const [history, setHistory] = useState<RouteNames[]>([initialRoute]);
+  const [history, setHistory] = useState<string[]>([initialRoute]);
 
-  const navigate = (route: RouteNames) => {
+  const navigate = (route: string) => {
     setHistory((prev) => [...prev, route]);
   };
 
-  const replace = (route: RouteNames) => {
+  const replace = (route: string) => {
     setHistory((prev) =>
       prev.length > 1 ? [...prev.slice(0, -1), route] : [route]
     );
@@ -70,10 +70,11 @@ export const NavigationProvider = <RouteNames extends string>({
 };
 
 export const useNavigation = <RouteNames extends string>() => {
-  const context: NavigationContextProps<RouteNames> | undefined =
-    useContext(NavigationContext);
+  const context = useContext(NavigationContext);
+
   if (!context) {
     throw new Error("useNavigation must be used within a NavigationProvider");
   }
+
   return context;
 };

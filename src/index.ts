@@ -1,5 +1,3 @@
-export {
-  NavigationProvider,
-  useNavigation,
-} from "./context/navigation-context";
-export { Navigator } from "./components/navigator";
+export { Navigator } from "./navigator";
+export { useNavigation } from "./store";
+export { Provider } from "./provider";
