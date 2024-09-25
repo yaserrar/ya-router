@@ -6,7 +6,7 @@ type NavigatorProps = {
 };
 
 export const Navigator = ({ routes }: NavigatorProps) => {
-  const { currentRoute } = useNavigation();
+  const { currentRoute } = useNavigation<string>();
 
   if (!currentRoute) {
     throw new Error(`Route not found in routes.`);
