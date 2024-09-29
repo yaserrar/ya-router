@@ -4,7 +4,7 @@ import { BackHandler } from "react-native";
 
 type Props = {
   children: React.ReactNode;
-  initialRoute: string;
+  initialRoute: { name: string; props?: any };
 };
 
 export const Provider = ({ children, initialRoute }: Props) => {

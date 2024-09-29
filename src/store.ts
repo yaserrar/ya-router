@@ -1,31 +1,46 @@
 import { create } from "zustand";
 
-type State<RouteKeys extends string> = {
-  currentRoute: RouteKeys | null;
-  history: RouteKeys[];
+type State<
+  Screens extends { [key: string]: { [key: string]: any } | undefined }
+> = {
+  currentRoute: { name: keyof Screens; props?: Screens[keyof Screens] } | null;
+  history: { name: keyof Screens; props?: Screens[keyof Screens] }[];
 };
 
-type Action<RouteKeys extends string> = {
-  navigate: (route: RouteKeys) => void;
-  replace: (route: RouteKeys) => void;
+type Action<
+  Screens extends { [key: string]: { [key: string]: any } | undefined }
+> = {
+  navigate: (route: {
+    name: keyof Screens;
+    props?: Screens[keyof Screens];
+  }) => void;
+  replace: (route: {
+    name: keyof Screens;
+    props?: Screens[keyof Screens];
+  }) => void;
   goBack: () => void;
 };
 
-export const useNavigation = <RouteKeys extends string>() =>
-  create<State<RouteKeys> & Action<RouteKeys>>((set) => ({
+export const useNavigation = <
+  Screens extends { [key: string]: { [key: string]: any } | undefined }
+>() =>
+  create<State<Screens> & Action<Screens>>((set) => ({
     currentRoute: null,
     history: [],
     navigate: (route) =>
       set(({ history }) => ({
         currentRoute: route,
-        history: [...history.filter((r) => r !== route), route],
+        history: [...history.filter((r) => r.name !== route.name), route],
       })),
     replace: (route) =>
       set(({ history }) => ({
         currentRoute: route,
         history:
           history.length > 1
-            ? [...history.slice(0, -1).filter((r) => r !== route), route]
+            ? [
+                ...history.slice(0, -1).filter((r) => r.name !== route.name),
+                route,
+              ]
             : [route],
       })),
     goBack: () =>
